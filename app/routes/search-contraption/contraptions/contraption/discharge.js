@@ -4,24 +4,27 @@ import { inject as service } from '@ember/service';
 export default Route.extend({
 
   dischargeApi:service('discharge-api'),
-  dischargeValidator(){
-    return true;
-  },
 
   isBorrowed:false,
 
   setupController: function(controller, model) {
     controller.set('isBorrowed',this.isBorrowed);
+    controller.set('quantity',1);
+    controller.set('selectedOp',0);
+
     this._super(controller, model);
   },
 
   actions:{
     confirmDisharge(){
-      if(this.dischargeValidator()){
+      var _t = this;
+      let qt = Number(this.get('controller').get('quantity'));
+      let currentQt = Number(this.currentModel.get('availableQt'));
+      let operator = Number(this.get('controller').get('selectedOp'));
 
-        let qt = this.get('controller').get('quantity');
+      if(operator !== 0 && qt > 0 & currentQt >= qt){
+
         let isBorrowed = this.get('controller').get('isBorrowed');
-        let operator = this.get('controller').get('selectedOp');
         this.dischargeApi.send(this.currentModel.get('id'), qt, operator, isBorrowed).then((resp) => {
           let availableQt = resp.data[0].attributes.availableQt;
           let order_status = resp.data[0].attributes.order_status;
@@ -33,13 +36,14 @@ export default Route.extend({
 
           // alert('ok');
           this.transitionTo('search-contraption.contraptions');
-          this.send('showSuccessAlert')
+          this.send('showSuccessAlert');
         })
         .catch(function(error){
-          console.log(error);
-          alert('Qualcosa è andato storto. Controlla i dati e riprova');
+          _t.send('showError', 'Qualcosa è andato storto. Controlla i dati e riprova');
         });
-
+      }
+      else{
+        this.send('showError', 'Qualcosa è andato storto. Controlla i dati e riprova');
       }
     }
   }

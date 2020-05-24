@@ -39,9 +39,12 @@ export default Service.extend({
           if(preQueryObj[kk].id && preQueryObj[kk].id.length !== 0){
             queryObj[kk] = preQueryObj[kk].id.join();
           }
-
           if(preQueryObj[kk].tokens.length !== 0){
-            queryObj['text'] = preQueryObj[kk].tokens.join();
+            if(preQueryObj[kk].text){
+              queryObj['text'] = preQueryObj[kk].text.join();
+            }else{
+              queryObj['text'] = preQueryObj[kk].tokens.join();
+            }
           }
         }
       }
@@ -76,7 +79,11 @@ export default Service.extend({
         if(checkTokenOccurences(ele.tokens, textToSearch)){
           if(ele.subtypes){
             return parseArray(ele.subtypes, textToSearch, {id:ele.id, tokens: []});
-          }else if(ele.id){
+          }
+          else if(ele.text){
+            return {id:ele.id ,tokens: ele.tokens, text:ele.text};
+          }
+          else if(ele.id){
             return {id:ele.id, tokens: []};
           }
           else{
@@ -129,6 +136,7 @@ export default Service.extend({
     var parseIdCode = function(code_idObj, searchText){
       var check = false;
       code_idObj.tokens.forEach((item, i) => {
+
         if(searchText.includes(item)){
           check = true;
         }
@@ -137,13 +145,13 @@ export default Service.extend({
     };
 
 
-    _parser.normalizedText = function(testToNormalize){
+    _parser.normalizeText = function(testToNormalize){
       return testToNormalize.toLowerCase();
     };
 
 
     _parser.getApiQuery = function(emberStore, searchText, paginationObj){
-      let normalizedText = _parser.normalizedText(searchText);
+      let normalizedText = _parser.normalizeText(searchText);
 
       return new Promise(function(resolve, reject){
         _t.getSearchMap().then(function(searchMap) {
@@ -155,20 +163,25 @@ export default Service.extend({
             apiObj = {c_id:idFilter};
           }
           else{
-
             if(parseIdCode(searchMap['id-code'], searchText)){
-              console.log('entraççççççççççççççççççççççççççççò');
               apiObj = {"id-code":searchText};
             }
             else{
               let categoryObj = parseCategories(searchMap.filters, normalizedText);
-              let geometryObj = parseGeometry(searchMap.geometryFilter, normalizedText);
-              apiObj = {...categoryObj, ...geometryObj, ...paginationObj};
+
+
+              console.log(categoryObj);
+              if(categoryObj.contraption_type || categoryObj.filter){
+                let geometryObj = parseGeometry(searchMap.geometryFilter, normalizedText);
+                apiObj = {...categoryObj, ...geometryObj, ...paginationObj};
+              }else{
+                apiObj = false;
+              }
             }
 
           }
 
-          resolve(apiObj);
+          return resolve(apiObj);
         });
       });
     };

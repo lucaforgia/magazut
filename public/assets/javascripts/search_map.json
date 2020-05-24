@@ -6,15 +6,27 @@
   },
   "id-code":{
     "name":"code_id filter",
-    "tokens":["FHM-N","FHM-M","FHM4T","MHSS","MP","PHMF","PHM","PHSS"]
+    "tokens":["FHM-N","FHM-M","FHM4T","MHSS","MP","PHMF","PHM","PHSS","PCHSS","FHMSG"]
   },
   "filters":{
     "contraption_type":[
       {
         "name":"punte",
-        "tokens":["punta","punte"],
+        "tokens":["punta","punte","svasatori","svasatore","svasa","centrino","centrini"],
         "id":[4,5,6,7],
         "subtypes":[
+          {
+            "id":[4],
+            "name":"Svasatori",
+            "tokens":["svasatore","svasatori","svasa"],
+            "text":["svasatore"]
+          },
+          {
+            "id":[4],
+            "name":"Punta centrino",
+            "tokens":["centrino","centrini"],
+            "text":["centrino"]
+          },
           {
             "name":"hss",
             "id":[4],
@@ -38,9 +50,26 @@
         ]
       },
       {
+        "name":"maschi",
+        "tokens":["maschio","maschi","maschiatore","maschiatori"],
+        "id":[14,15],
+        "subtypes":[
+          {
+            "name":"manuale",
+            "id":[14],
+            "tokens":["mano","manuale"]
+          },
+          {
+            "name":"macchina",
+            "id":[15],
+            "tokens":["macchina","rivestito","centro"]
+          }
+        ]
+      },
+      {
         "name":"frese",
         "id":[8,9,10,11,12],
-        "tokens":["fresa", "frese"],
+        "tokens":["fresa", "frese","piko"],
         "subtypes":[
           {
             "name": "inserti",
@@ -214,7 +243,7 @@
     "geometry_diameter":{
       "name":"Geometria-diametro",
       "tokens":[
-        "(d{1}|dia{1}|diametro{1})[ ]*[0-9,.]+([ ]|$|mm)"
+        "(d{1}|dia{1}|diametro{1}|m)[ ]*[0-9,.]+([ ]|$|mm)"
       ]
     }
   }

@@ -6,4 +6,5 @@ import EmberObject, {
 
 export default Controller.extend({
 
+
 });
