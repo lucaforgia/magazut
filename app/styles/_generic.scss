@@ -13,7 +13,11 @@ $gray2:#bbc5d5;
 $gray3:#909aa9;
 $gray4:#687180;
 $gray5:#424b59;
-
+$link:#725AC1;
+$link_hover:#362768;
+$link_visited:#725AC1;
+$link_active:#362768;
+$link_shadow:none;
 
 
 body{
@@ -70,24 +74,46 @@ h2{
   padding-left: 10px;
 }
 
+.space_t_10{
+  padding-top: 10px;
+}
+
 .link{
   background-color: transparent;
   border: none;
   font-size: 1.1em;
   padding: 0;
-  text-decoration: underline;
-  color:black;
+  text-decoration: none;
+  color:$link;
   cursor: pointer;
   &:visited{
-    color:black;
+    color:$link_visited;
   }
   &:hover{
-    color:$gray4;
+    color:$link_hover;
   }
+  &.active{
+    color:$link_active;
+  }
+  text-shadow:$link_shadow;
 }
 
 .clickable{
   cursor: pointer;
+  color:$link;
+  // text-decoration: underline;
+  cursor: pointer;
+  &:visited{
+    color:$link_visited;
+  }
+  &:hover{
+    color:$link_hover;
+  }
+  &.active{
+    color:$link_active;
+  }
+  text-shadow:$link_shadow;
+
 }
 
 a.button, button.button, input.button{
@@ -121,16 +147,10 @@ a.button, button.button, input.button{
 
 .to_left{
   text-align: left;
-  &>{
-    display: inline-block;
-  }
 }
 
 .to_right{
   text-align: right;
-  &>{
-    display: inline-block;
-  }
 }
 
 .fleft{
@@ -194,4 +214,12 @@ select{
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.isDisabled {
+  pointer-events: none;
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
 }
